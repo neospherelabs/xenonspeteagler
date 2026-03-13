@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="description"
+		content="Eaglercraft (EaglercraftX) WASM is a high-performance browser-based port of Minecraft Java Edition 1.8.8 using WebAssembly technology for superior speed and responsiveness. This unofficial port runs entirely in your web browser with no downloads or installations required. Powered by EaglercraftX WASM, experience faster loading times, smoother gameplay, and significantly better FPS compared to the standard version. Works on Chromebooks, PCs, Macs, and mobile devices with full multiplayer support and custom servers." />
+	<meta name="keywords"
+		content="eaglercraft, eaglercraftx, minecraft, 1.8, 1.8.8, wasm, webassembly, minecraft online, fast minecraft, browser game, high performance, chromebook minecraft, free minecraft, multiplayer minecraft, eaglercraft wasm" />
+	<meta name="author" content="q13x" />
+	<meta name="robots" content="index, follow" />
+	<link rel="canonical" href="https://eaglercraft.q13x.com/1.8-wasm/" />
+
+	<title>EaglercraftX 1.8.8 (WASM)</title>
+
+	<!-- Open Graph / Facebook -->
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://eaglercraft.q13x.com/1.8.8/wasm/" />
+	<meta property="og:title" content="Minecraft 1.8.8 WASM - EaglercraftX | Eaglercraft Browser Port" />
+	<meta property="og:description"
+		content="Eaglercraft (EaglercraftX) WASM is a high-performance browser-based port of Minecraft Java Edition 1.8.8 using WebAssembly. Runs entirely in your browser with no downloads. This unofficial port powered by EaglercraftX delivers faster loading, smoother gameplay, and better FPS." />
+	<meta property="og:image" content="https://q13x.com/favicon.ico" />
+	<meta property="og:site_name" content="EaglercraftX Distributions" />
+	<meta property="og:locale" content="en-US" />
+
+	<!-- Twitter -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:url" content="https://eaglercraft.q13x.com/1.8.8/wasm/" />
+	<meta name="twitter:title" content="Minecraft 1.8.8 WASM - EaglercraftX | Eaglercraft Browser Port" />
+	<meta name="twitter:description"
+		content="Eaglercraft (EaglercraftX) WASM is a high-performance browser-based port of Minecraft Java Edition 1.8.8 using WebAssembly. No downloads required. Unofficial port powered by EaglercraftX with enhanced speed and performance." />
+	<meta name="twitter:image" content="https://q13x.com/favicon.ico" />
+
+	<link type="image/ico" rel="shortcut icon" href="/favicon.ico" />
+	<!-- BEGIN ORGIN TRIAL TOKENS -->
+	<meta http-equiv="origin-trial"
+		content="AmKk4sK3dhaxcsI74UcksfNf43DYbZ7H4WqFb2FzNPpzhStB8c4fex2xqdwAvn8GMMgLLkXDQGK33UlAGdRFOQsAAAB0eyJvcmlnaW4iOiJodHRwczovL3ExM3guY29tOjQ0MyIsImZlYXR1cmUiOiJXZWJBc3NlbWJseUpTUHJvbWlzZUludGVncmF0aW9uIiwiZXhwaXJ5IjoxNzUzMTQyNDAwLCJpc1N1YmRvbWFpbiI6dHJ1ZX0=">
+	<meta http-equiv="origin-trial"
+		content="A3CslQxt4zihRLBFeFflfTjX0McWZ1o8wifSJLVf1gqvgBjhw58mubR3ehsHBTl8b1Yn9OMRv8XbyLJkOLL9LHcAAAB0eyJvcmlnaW4iOiJodHRwczovL3ExM3guY29tOjQ0MyIsImZlYXR1cmUiOiJXZWJBc3NlbWJseUpTUHJvbWlzZUludGVncmF0aW9uIiwiZXhwaXJ5IjoxNzQ1NDQzOTI5LCJpc1N1YmRvbWFpbiI6dHJ1ZX0=">
+	<!-- END ORGIN TRIAL TOKENS -->
+	<!-- q13x's caching EaglercraftX loader, made with lots of love. <3 -->
+	<script type="text/javascript" src="/lib/launcher.js"></script>
+	<script type="text/javascript" src="/lib/util.js"></script>
+	<script type="text/javascript" src="/lib/wispcraft.js"></script>
+	<script type="text/javascript" src="/lib/largeEPK.js"></script>
+	<script type="text/javascript" src="/lib/sha256.js"></script>
+	<script type="text/javascript" src="bootstrap.js"></script>
+	<script type="text/javascript">
+		"use strict";
+		window.addEventListener("load", async () => {
+			if (document.location.href.startsWith("file:")) {
+				alert("HTTP please, do not open this file locally, run a local HTTP server and load it via HTTP");
+			} else {
+				try {
+					checkServiceWorker()
+					let [epk] = await Promise.all([
+						await loadCachedAssetUI("game-assets/meta.json", true, "1.8.8-wasm")
+					])
+					// epk = new Uint8Array(epk);
+					const relayId = Math.floor(Math.random() * 4), element = getCoreElements()
+					const params = {
+						demoMode: false,
+						localesURI: "lang/",
+						container: "game_frame",
+						assetsURI: epk,
+						worldsDB: "worlds",
+						...(await (await fetch("/list.json")).json())
+					};
+					parseParams(params);
+					params.relays[Math.round(Math.random() * (params.relays.length - 1))].primary = true;
+					window.eaglercraftXOpts = params;
+					await new Promise(res => {
+						(async () => {
+							await window.wispcraftServerReady
+							res()
+						})()
+						setTimeout(1500, () => res())
+					})
+
+					// this shit took 1 hour to debug
+					document.body.innerHTML = document.body.innerHTML.trim();
+					main();
+				} catch (err) {
+					window.alert("Something went wrong, try clearing your browser cache/data?\n---\n" + err.stack ?? err)
+				}
+			}
+		});
+	</script>
+</head>
+<style id="bodyStyle">
+	body {
+		margin: 0;
+		width: 100vw;
+		height: 100vh;
+		overflow: hidden;
+	}
+</style>
+
+<body id="game_frame">
+	<div style="margin:0px;width:100%;height:100%;font-family:sans-serif;display:flex;align-items:center;user-select:none;"
+		id="loading-div">
+		<div style="margin:auto;text-align:center;">
+			<h2 id="action-block">Checking for updates...</h2>
+			<h2 id="context-block">(this may take a while)</h2>
+			<div style="border:2px solid black;width:100%;height:15px;padding:1px;margin-bottom:20vh;font-family: Arial, sans-serif;font-weight: bold;"
+				hidden="" id="progress-bar-container">
+				<div id="progress-bar" style="background-color:#ff4545;width:0%;height:100%;top:0;"></div>
+			</div>
+		</div>
+	</div>
+<!-- Cloudflare Pages Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "67860e5b6f804025a1b0f2608917641e"}'></script><!-- Cloudflare Pages Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"132e8910ad8e4fdcb7dfb31a0c6889d4","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+
+</html>
